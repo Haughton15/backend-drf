@@ -1,15 +1,14 @@
 #!/bin/sh
-
-if [ "$DATABASE" = "postgres" ]
-then
+if [ "$DATABASE" = "postgres" ]; then
     echo "Waiting for postgres..."
-
     while ! nc -z $POSTGRES_HOST $POSTGRES_PORT; do
-      sleep 0.1
+        sleep 0.1
     done
-
     echo "PostgreSQL started"
 fi
-
+echo "Running migrations..."
 python manage.py migrate
-exec "$@"   
+echo "Applying init.sql..."
+PGPASSWORD=$POSTGRES_PASSWORD psql -h $POSTGRES_HOST -U $POSTGRES_USER -d $POSTGRES_DB -f db/init.sql || { echo "Error: Failed to apply init.sql"; exit 1; }
+echo "Starting Django server..."
+exec "$@"

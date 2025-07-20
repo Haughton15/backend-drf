@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -63,6 +64,8 @@ SPECTACULAR_SETTINGS = {
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+DEBUG = os.environ.get('DJANGO_DEBUG', 'False') == 'True'   
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -99,11 +102,11 @@ WSGI_APPLICATION = 'backend_drf.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'drf_db',
-        'USER': 'drf_user',
-        'PASSWORD': 'drf_pass',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': os.environ.get('POSTGRES_DB', 'drf_db'),
+        'USER': os.environ.get('POSTGRES_USER', 'drf_user'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'drf_pass'),
+        'HOST': os.environ.get('POSTGRES_HOST', 'db'),
+        'PORT': int(os.environ.get('POSTGRES_PORT', 5432)),
     }
 }
 

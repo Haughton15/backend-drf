@@ -19,17 +19,3 @@ class LoanSerializer(ModelSerializer):
         book.save()
         return super().create(validated_data)
     
-class ReturnLoanSerializer(ModelSerializer):
-    class Meta:
-        model = Loan
-        fields = ['id', 'return_date']
-
-    def update(self, instance):
-        if instance.return_date:
-            raise ValidationError("Este préstamo ya fue devuelto.")
-
-        instance.return_date = date.today()
-        instance.book.is_available = True
-        instance.book.save()
-        instance.save()
-        return instance
