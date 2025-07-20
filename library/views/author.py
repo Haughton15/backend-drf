@@ -1,7 +1,7 @@
 from rest_framework.viewsets import ModelViewSet
 from ..models.author import Author
 from ..serializers.author import AuthorSerializer
-from drf_spectacular.utils import extend_schema, OpenApiParameter
+from drf_spectacular.utils import extend_schema
 
 class AuthorViewSet(ModelViewSet):
     queryset = Author.objects.all()

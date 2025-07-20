@@ -10,8 +10,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
-import os
+import environ
 from pathlib import Path
+
+# Inicializar environ
+env = environ.Env()
+environ.Env.read_env('.env')
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -24,7 +29,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-sa_!#ows___24kjc0xafeg@cybyu3-7j&bw@22&r0xc_$cs)1g'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env.bool('DJANGO_DEBUG', default=False) == True
 
 ALLOWED_HOSTS = []
 
@@ -64,8 +69,6 @@ SPECTACULAR_SETTINGS = {
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-DEBUG = os.environ.get('DJANGO_DEBUG', 'False') == 'True'   
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -102,11 +105,11 @@ WSGI_APPLICATION = 'backend_drf.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('POSTGRES_DB', 'drf_db'),
-        'USER': os.environ.get('POSTGRES_USER', 'drf_user'),
-        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'drf_pass'),
-        'HOST': os.environ.get('POSTGRES_HOST', 'db'),
-        'PORT': int(os.environ.get('POSTGRES_PORT', 5432)),
+        'NAME': env('POSTGRES_DB', default='drf_db'),
+        'USER': env('POSTGRES_USER', default='drf_user'),
+        'PASSWORD': env('POSTGRES_PASSWORD', default='drf_pass'),
+        'HOST': env('POSTGRES_HOST', default='db'),
+        'PORT': env.int('POSTGRES_PORT', default=5432),
     }
 }
 

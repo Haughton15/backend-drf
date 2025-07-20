@@ -8,6 +8,8 @@ from drf_spectacular.utils import extend_schema
 from django.utils import timezone
 
 class LoanViewSet(ModelViewSet):
+    http_method_names = ['get', 'post', 'delete', 'head', 'options']
+
     queryset = Loan.objects.select_related('book').all()
     serializer_class = LoanSerializer
 
